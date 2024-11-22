@@ -3,3 +3,9 @@
 
 # SQLite File
 ./project/db.sqlite3
+
+# PyCharm Files
+.idea
+
+# Mac Files
+.DS_Store
