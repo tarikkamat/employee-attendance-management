@@ -1,2 +1,5 @@
-# PyCharm Files
-.idea/
+# Environment Files
+./venv
+
+# SQLite File
+./project/db.sqlite3
