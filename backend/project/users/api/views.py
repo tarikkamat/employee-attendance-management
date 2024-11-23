@@ -19,6 +19,10 @@ class GetUser(BaseDetailView):
     serializer_class = UserSerializer
     model = User
 
+    def delete(self, request, pk):
+        # Override edilen delete methodu silinirse BaseModel ile bu özellik aktif edilebilir.
+        return APIResponse.bad_request({"message:": "This feature is disabled.", "status": False})
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
