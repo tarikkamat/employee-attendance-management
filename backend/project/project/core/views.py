@@ -7,6 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db.models import Q
 
 from project.core.responses import APIResponse
 from project.db.models import BaseModel
@@ -24,7 +25,7 @@ def get_queryset_or_404(klass, *args, **kwargs):
 
 class CustomAPIView(APIView):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
         self.args = None
         self.kwargs = None
         self.request = None
@@ -77,7 +78,9 @@ class BaseListView(ListAPIView):
             return queryset
 
         if not self.request.user.is_superuser and hasattr(self.model, "created_by"):
-            return queryset.filter(created_by=self.request.user)
+            return queryset.filter(
+                Q(created_by=self.request.user) | Q(owner=self.request.user)
+            )
 
         return queryset
 
@@ -97,6 +100,7 @@ class BaseListView(ListAPIView):
             request.data._mutable = True
         except AttributeError:
             pass
+
         request.data.update({"created_by": request.user.id})
 
         if serializer.is_valid():
@@ -113,11 +117,13 @@ class BaseDetailView(CustomAPIView):
 
     def get_object(self, pk):
         obj = self.get_object_or_404(self.model, pk=pk)
+
         if self.model == User and not self.request.user.is_superuser and obj.pk != self.request.user.pk:
             return APIResponse.unauthorized("You do not have permission to access this user.")
 
-        if hasattr(obj, "created_by") and not self.request.user.is_superuser and obj.created_by != self.request.user:
-            return APIResponse.unauthorized("You do not have permission to access this object.")
+        if hasattr(obj, "created_by") and not self.request.user.is_superuser:
+            if obj.created_by != self.request.user and getattr(obj, "owner", None) != self.request.user:
+                return APIResponse.unauthorized("You do not have permission to access this object.")
 
         return obj
 
