@@ -12,7 +12,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     hire_date = models.DateField(null=True, blank=True)
-    annual_leave_days = models.IntegerField(default=15)
+    annual_leave_days = models.DecimalField(max_digits=4, decimal_places=1, default=15)
 
     # PermissionsMixin fields
     is_active = models.BooleanField(default=True)
