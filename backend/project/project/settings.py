@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'attendances'
+    'leaves'
 ]
 
 MIDDLEWARE = [
@@ -137,7 +137,6 @@ REST_FRAMEWORK = {
 }
 
 # Simple JWT Settings
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -151,4 +150,11 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
+}
+
+COMPANY_SETTINGS = {
+    'WORK_START_HOURS': 8,
+    'WORK_START_MINUTES': 0,
+    'WORK_END_HOURS': 18,
+    'WORK_END_MINUTES': 0,
 }
