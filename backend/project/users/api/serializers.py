@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from users.models import User
+from users.models import User, UserSession
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -45,3 +45,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['last_name'] = user.last_name
 
         return token
+
+
+class UserSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSession
+        fields = '__all__'
