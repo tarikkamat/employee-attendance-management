@@ -1,12 +1,5 @@
 from datetime import datetime
 
-"""
-This function returns the slug of a model in the API
-
-:param model: model object
-:return: slug of the model in the API
-"""
-
 
 def get_api_slug(model=object):
     verbose_name = model._meta.verbose_name
@@ -18,14 +11,6 @@ def get_api_slug(model=object):
     else:
         model_slug = model_slug + 's'
     return model_slug
-
-
-"""
-This function converts a string datetime to a datetime object
-
-:param str_datetime: string datetime
-:return: datetime object
-"""
 
 
 def str_to_datetime(str_datetime):
