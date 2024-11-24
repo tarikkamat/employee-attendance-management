@@ -8,6 +8,9 @@ migrate:
 migrate-clean:
 	rm -rf */*/migrations/[0-9]*_*.py
 
+load-users:
+	python3 project/manage.py loaddata project/user_data.json
+
 docker-build:
 	docker build . -t finansfatura:latest
 
