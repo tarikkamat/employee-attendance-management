@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geçmiş İzinlerim | 2N Tech</title>
+    <!-- Bootstrap CSS -->
+    <link href="/theme/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/theme/css/custom.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-3 col-lg-2" id="sidebar">
+            <div class="d-flex flex-column">
+                <h5 class="px-3 mb-4 text-secondary">2N Tech</h5>
+                <a href="../dashboard.html" class="sidebar-link">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Gösterge Paneli
+                </a>
+                <div class="sidebar-item">
+                    <a href="#izinlerSubmenu"
+                       class="sidebar-link d-flex align-items-center justify-content-between active"
+                       data-bs-toggle="collapse"
+                       aria-expanded="true">
+                        <div>
+                            <i class="bi bi-list me-2"></i>
+                            İzin Seçenekleri
+                        </div>
+                        <span class="arrow-icons">
+                            <i class="bi bi-chevron-right icon-right"></i>
+                            <i class="bi bi-chevron-down icon-down"></i>
+                        </span>
+                    </a>
+                    <div class="collapse show" id="izinlerSubmenu">
+                        <div class="submenu">
+                            <a href="request_leave.html" class="sidebar-link ps-4">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Talep Oluştur
+                            </a>
+                            <a href="index.html" class="sidebar-link ps-4 active">
+                                <i class="bi bi-calendar me-2"></i>
+                                Geçmiş İzinlerim
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-person me-2"></i>
+                    Özlük Bilgilerim
+                </a>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-briefcase me-2"></i>
+                    Çalışma Bilgilerim
+                </a>
+                <a href="/auth/logout.html" class="sidebar-link">
+                    <i class="bi bi-briefcase me-2"></i>
+                    Çıkış Yap
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-md-9 col-lg-10 main-content">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb p-3 bg-white rounded shadow-sm">
+                    <li class="breadcrumb-item"><a href="../dashboard.html" class="text-secondary">Gösterge Paneli</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Geçmiş İzinlerim</li>
+                </ol>
+            </nav>
+            <div class="row" id="componentContainer"></div>
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 text-primary fw-bold">
+                            <i class="bi bi-calendar-check me-2"></i>
+                            Geçmiş İzinlerim
+                        </h5>
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i>
+                            Yeni İzin Talebi Oluştur
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-tag text-muted"></i>
+                                </span>
+                                <select class="form-select border-start-0" id="reasonFilter">
+                                    <option value="">İzin Tipleri</option>
+                                    <option value="ANNUAL">Yıllık İzin</option>
+                                    <option value="RELOCATION">Taşınma İzni</option>
+                                    <option value="SICK">Hastalık İzini</option>
+                                    <option value="DEATH_OF_CHILD_OR_SPOUSE">Çocuk veya Eşin Vefatı</option>
+                                    <option value="DEATH_OF_MOM_DAD_OR_SIBLING">Anne, Baba veya Kardeşin Vefatı</option>
+                                    <option value="DEATH_OF_SPOUSE_MOM_DAD_SIBLING">Eş, Anne, Baba veya Kardeşin Vefatı</option>
+                                    <option value="BIRTH_DAY">Doğum Günü İzni</option>
+                                    <option value="SPOUSE_BIRTH_DAY">Eşin Doğum Günü İzni</option>
+                                    <option value="COMPASSIONATE_LEAVE">Mazaret İzni</option>
+                                    <option value="MILITARY_LEAVE">Askerlik İzni</option>
+                                    <option value="MATERNITY_LEAVE">Süt İzni</option>
+                                    <option value="FREE_LEAVE">Ücretsiz İzin</option>
+                                    <option value="MARRIAGE_LEAVE">Düğün İzni</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-funnel text-muted"></i>
+                                </span>
+                                <select class="form-select border-start-0" id="statusFilter">
+                                    <option value="">Durumu</option>
+                                    <option value="PENDING">Onay Bekliyor</option>
+                                    <option value="APPROVED">Onaylandı</option>
+                                    <option value="REJECTED">Reddedildi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100" id="filterButton">
+                                <i class="bi bi-filter me-1"></i>
+                                Filtrele
+                            </button>
+                        </div>
+                    </div>
+                    <div id="tableContainer" class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Leave Script -->
+<script type="module">
+    import Leave from "/js/Leave.js";
+    Leave.init('tableContainer','componentContainer');
+</script>
+<!-- Check Auth -->
+<script type="module" src="/js/CheckAuthenticate.js"></script>
+<!-- Bootstrap Bundle JS -->
+<script src="/theme/js/bootstrap.bundle.js"></script>
+</body>
+</html>

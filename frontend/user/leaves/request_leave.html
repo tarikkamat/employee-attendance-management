@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talep Oluştur | 2N Tech</title>
+    <!-- Bootstrap CSS -->
+    <link href="/theme/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/theme/css/custom.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-12 col-md-3 col-lg-2" id="sidebar">
+            <div class="d-flex flex-column">
+                <h5 class="px-3 mb-4 text-secondary">2N Tech</h5>
+                <a href="../dashboard.html" class="sidebar-link">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Gösterge Paneli
+                </a>
+                <div class="sidebar-item">
+                    <!-- İzinler Başlığı -->
+                    <a href="#izinlerSubmenu"
+                       class="sidebar-link d-flex align-items-center justify-content-between active"
+                       data-bs-toggle="collapse"
+                       aria-expanded="true">
+                        <div>
+                            <i class="bi bi-list me-2"></i>
+                            İzin Seçenekleri
+                        </div>
+                        <span class="arrow-icons">
+                            <i class="bi bi-chevron-right icon-right"></i>
+                            <i class="bi bi-chevron-down icon-down"></i>
+                        </span>
+                    </a>
+                    <!-- Açılır Menü (Başlangıçta Açık) -->
+                    <div class="collapse show" id="izinlerSubmenu">
+                        <div class="submenu">
+                            <a href="request_leave.html" class="sidebar-link ps-4 active">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Talep Oluştur
+                            </a>
+                            <a href="index.html" class="sidebar-link ps-4">
+                                <i class="bi bi-calendar me-2"></i>
+                                Geçmiş İzinlerim
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-person me-2"></i>
+                    Özlük Bilgilerim
+                </a>
+                <a href="#" class="sidebar-link">
+                    <i class="bi bi-briefcase me-2"></i>
+                    Çalışma Bilgilerim
+                </a>
+                <a href="/auth/logout.html" class="sidebar-link">
+                    <i class="bi bi-briefcase me-2"></i>
+                    Çıkış Yap
+                </a>
+            </div>
+        </div>
+
+        <!-- Ana İçerik -->
+        <div class="col-12 col-md-9 col-lg-10 main-content">
+            <!-- Ekmek Kırıntısı Navigasyonu -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb p-3 bg-white rounded shadow-sm">
+                    <li class="breadcrumb-item"><a href="../dashboard.html" class="text-secondary">Gösterge Paneli</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">İzin Talebi Oluştur</li>
+                </ol>
+            </nav>
+
+            <!-- Üst Bilgi Kartı -->
+            <div class="card welcome-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary">Hoş Geldiniz</h5>
+                    <p class="card-text text-muted">İK Portalına hoş geldiniz. Sol menüden işlemlerinizi gerçekleştirebilirsiniz.</p>
+                </div>
+            </div>
+
+            <!-- İstatistik Kartları -->
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card welcome-card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Kalan İzin Günü</h6>
+                            <h3 class="card-title text-primary">14 gün</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card welcome-card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Bekleyen İzin Talebi</h6>
+                            <h3 class="card-title text-warning">2 talep</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card welcome-card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Kullanılan İzin</h6>
+                            <h3 class="card-title text-success">8 gün</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Check Auth -->
+<script type="module" src="/js/CheckAuthenticate.js"></script>
+<!-- Bootstrap Bundle JS -->
+<script src="/theme/js/bootstrap.bundle.js"></script>
+</body>
+</html>
