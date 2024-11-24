@@ -1,0 +1,59 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "last_login": null,
+      "created_at": "2024-11-24 04:29:37.095008 +00:00",
+      "updated_at": "2024-11-24 04:29:37.100919 +00:00",
+      "is_deleted": false,
+      "email": "admin@mail.com",
+      "password": "pbkdf2_sha256$870000$858d8GuBAqOAS3HuvpGWa1$QOsWfNLIlUbPMBUFsbGpNVQUr283BIDRNzK+B9AwpSc=",
+      "first_name": "2N Tech",
+      "last_name": "Admin",
+      "hire_date": null,
+      "annual_leave_days": 15.0,
+      "is_active": true,
+      "is_staff": true,
+      "is_superuser": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "last_login": null,
+      "created_at": "2024-11-24 04:29:37.095008 +00:00",
+      "updated_at": "2024-11-24 04:29:37.100919 +00:00",
+      "is_deleted": false,
+      "email": "personel1@mail.com",
+      "password": "pbkdf2_sha256$870000$858d8GuBAqOAS3HuvpGWa1$QOsWfNLIlUbPMBUFsbGpNVQUr283BIDRNzK+B9AwpSc=",
+      "first_name": "Tarık",
+      "last_name": "Kamat",
+      "hire_date": "2024-11-24",
+      "annual_leave_days": 15.0,
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "last_login": null,
+      "created_at": "2024-11-24 04:29:37.095008 +00:00",
+      "updated_at": "2024-11-24 04:29:37.100919 +00:00",
+      "is_deleted": false,
+      "email": "personel2@mail.com",
+      "password": "pbkdf2_sha256$870000$858d8GuBAqOAS3HuvpGWa1$QOsWfNLIlUbPMBUFsbGpNVQUr283BIDRNzK+B9AwpSc=",
+      "first_name": "Ali",
+      "last_name": "Veli",
+      "hire_date": "2024-11-24",
+      "annual_leave_days": 15.0,
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  }
+]
