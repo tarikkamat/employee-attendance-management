@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş | 2N Tech</title>
+    <link href="/theme/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin-top: 100px;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: none;
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        #errorMessage {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 login-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Giriş Ekranı</h3>
+                </div>
+                <!-- Bootstrap alert -->
+                <div id="errorMessage" class="alert alert-danger" style="display: none;" role="alert">
+                    Giriş başarısız. Lütfen bilgilerinizi kontrol edin.
+                </div>
+                <div class="card-body p-4">
+                    <form id="loginForm">
+                        <div class="mb-4">
+                            <label for="email" class="form-label">E-posta</label>
+                            <input type="email" class="form-control" id="email" value="personel1@mail.com" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Şifre</label>
+                            <input type="password" class="form-control" id="password" value="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-login">Giriş Yap</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Login Script -->
+<script type="module">
+    import Authentication from "../js/Authentication.js"
+
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+        event.preventDefault()
+
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
+
+        try {
+            const isLoggedIn = await Authentication.Login(email, password)
+
+            if (isLoggedIn) {
+                console.log('Login successful')
+            }
+        } catch (error) {
+            console.error(error.message);
+            const errorMessage = document.getElementById('errorMessage')
+            errorMessage.style.display = 'block'
+        }
+    });
+</script>
+<script src="/theme/js/bootstrap.bundle.js"></script>
+</body>
+</html>
