@@ -1,0 +1,103 @@
+body {
+    background-color: #f8f9fa;
+}
+
+#sidebar {
+    min-height: 100vh;
+    background-color: #ffffff;
+    border-right: 1px solid #dee2e6;
+    padding: 20px 0;
+}
+
+.sidebar-link {
+    padding: 10px 20px;
+    color: #6c757d;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s;
+}
+
+.sidebar-link:hover {
+    background-color: #f1f3f5;
+    color: #fd7e14;
+}
+
+.sidebar-link.active {
+    background-color: #e9ecef;
+    color: #fd7e14;
+    border-left: 4px solid #fd7e14;
+}
+
+/* Alt menü için genel stiller */
+#izinlerSubmenu {
+    background-color: #e9ecef;
+}
+
+#izinlerSubmenu .submenu .sidebar-link {
+    background-color: #e9ecef !important;
+    padding-left: 2.5rem;
+    margin: 2px 0;
+}
+
+/* Alt menüdeki hover durumu */
+#izinlerSubmenu .submenu .sidebar-link:hover {
+    background-color: #f1f3f5 !important;
+    color: #fd7e14;
+}
+
+/* Alt menüdeki aktif durum */
+#izinlerSubmenu .submenu .sidebar-link.active {
+    background-color: #e9ecef !important;
+    color: #fd7e14;
+}
+
+/* Ana menü açıkken stil */
+.sidebar-link[aria-expanded="true"] {
+    background-color: #e9ecef;
+    color: #fd7e14;
+    border-left: 4px solid #fd7e14;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.welcome-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.arrow-icons {
+    position: relative;
+}
+
+.icon-right,
+.icon-down {
+    transition: opacity 0.3s;
+}
+
+.icon-down {
+    position: absolute;
+    right: 0;
+    opacity: 0;
+}
+
+/* Menü açıkken */
+[aria-expanded="true"] .icon-right {
+    opacity: 0;
+}
+
+[aria-expanded="true"] .icon-down {
+    opacity: 1;
+}
+
+/* Menü kapalıyken */
+[aria-expanded="false"] .icon-right {
+    opacity: 1;
+}
+
+[aria-expanded="false"] .icon-down {
+    opacity: 0;
+}
