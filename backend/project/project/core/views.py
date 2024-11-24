@@ -1,13 +1,10 @@
 from django.http import Http404
-from users.models import User
 from rest_framework import permissions, serializers
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.db.models import Q
 
 from project.core.responses import APIResponse
 from project.db.models import BaseModel
@@ -24,33 +21,40 @@ def get_queryset_or_404(klass, *args, **kwargs):
 
 
 class CustomAPIView(APIView):
-    def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
-        self.args = None
-        self.kwargs = None
-        self.request = None
-        self.headers = {}
-        self.response = None
-
-    @staticmethod
-    def get_object_or_404(klass, *args, **kwargs):
-        return get_queryset_or_404(klass, *args, **kwargs)
+    def get_object_or_404(self, klass, *args, **kwargs):
+        queryset = _get_queryset(klass)
+        if not hasattr(queryset, "get"):
+            klass__name = (
+                klass.__name__ if isinstance(klass, type) else klass.__class__.__name__
+            )
+            raise ValueError("First argument to get_object_or_404() must be a Model, Manager, " "or QuerySet, not '%s'." % klass__name)
+        try:
+            return queryset.get(*args, **kwargs)
+        except queryset.model.DoesNotExist:
+            raise Http404("No %s matches the given query." % queryset.model._meta.object_name)
 
     def dispatch(self, request, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
-        self.request = self.initialize_request(request, *args, **kwargs)
-        self.headers = self.default_response_headers
+        request = self.initialize_request(request, *args, **kwargs)
+        self.request = request
+        self.headers = self.default_response_headers  # deprecate?
         try:
-            self.initial(self.request, *args, **kwargs)
+            self.initial(request, *args, **kwargs)
+            # Get the appropriate handler method
             if request.method.lower() in self.http_method_names:
                 handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
             else:
                 handler = self.http_method_not_allowed
-            response = handler(self.request, *args, **kwargs)
+            response = handler(request, *args, **kwargs)
         except Exception as exc:
             response = self.handle_exception(exc)
-        self.response = self.finalize_response(self.request, response, *args, **kwargs)
+        self.response = self.finalize_response(request, response, *args, **kwargs)
+        try:
+            if hasattr(request.user, 'email'):
+                add_activity_log(request=request, response=self.response)
+        except:
+            pass
         return self.response
 
     class Meta:
@@ -66,87 +70,67 @@ class BaseListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [JWTAuthentication, TokenAuthentication, SessionAuthentication]
     pagination_class = PageNumberPagination
+
     serializer_class = serializers.ModelSerializer
     model = BaseModel
 
     def get_queryset(self):
-        queryset = self.model.objects.url_filter(self.request).filter(is_deleted=False).order_by("id")
+        queryset = self.model.objects.url_filter(self.request).filter(is_deleted=False)
 
-        if self.model == User:
-            if not self.request.user.is_superuser:
-                return queryset.filter(id=self.request.user.id)
-            return queryset
+        if self.request.user.is_superuser:
+            return queryset.order_by('id')
 
-        if not self.request.user.is_superuser and hasattr(self.model, "created_by"):
-            return queryset.filter(
-                Q(created_by=self.request.user) | Q(owner=self.request.user)
-            )
+        if hasattr(self.model, 'fk_user_id'):
+            return queryset.filter(fk_user_id=self.request.user.id).order_by('id')
 
-        return queryset
+        return queryset.order_by('id')
 
     def get(self, request):
-        try:
-            paginator = self.pagination_class()
-            queryset = self.get_queryset()
-            paginated_queryset = paginator.paginate_queryset(queryset, request, view=self)
-            serializer = self.serializer_class(paginated_queryset, many=True)
-            return paginator.get_paginated_response(serializer.data)
-        except AttributeError as e:
-            return APIResponse.custom_error(f"Pagination error: {str(e)}")
+        pagination_class = self.pagination_class()
+        pagination_class.page_query_param = "page"
+        pagination_class.page_size_query_param = 'page_size'
+        context = pagination_class.paginate_queryset(self.get_queryset(), request)
+        serializer = self.serializer_class(context, many=True)
+        return pagination_class.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        try:
-            request.data._mutable = True
-        except AttributeError:
-            pass
-
-        request.data.update({"created_by": request.user.id})
 
         if serializer.is_valid():
             serializer.save()
-            return APIResponse.created(serializer.data)
-        return APIResponse.bad_request(serializer.errors)
+            return APIResponse.created(serializer)
+        return APIResponse.bad_request(serializer)
+
+    class Meta:
+        abstract = True
 
 
 class BaseDetailView(CustomAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [JWTAuthentication, TokenAuthentication, SessionAuthentication]
+
     serializer_class = serializers.ModelSerializer
     model = BaseModel
 
-    def get_object(self, pk):
-        obj = self.get_object_or_404(self.model, pk=pk)
-
-        if self.model == User and not self.request.user.is_superuser and obj.pk != self.request.user.pk:
-            return APIResponse.unauthorized("You do not have permission to access this user.")
-
-        if hasattr(obj, "created_by") and not self.request.user.is_superuser:
-            if obj.created_by != self.request.user and getattr(obj, "owner", None) != self.request.user:
-                return APIResponse.unauthorized("You do not have permission to access this object.")
-
-        return obj
+    def get_queryset(self, pk):
+        return self.model.objects.get(pk=pk)
 
     def get(self, request, pk):
-        obj = self.get_object(pk)
-        if isinstance(obj, Response):
-            return obj
-        serializer = self.serializer_class(obj)
-        return APIResponse.success(serializer.data)
+        serializer = self.serializer_class(self.get_queryset(pk=pk))
+        return APIResponse.success(serializer)
 
     def patch(self, request, pk):
-        obj = self.get_object(pk)
-        if isinstance(obj, Response):
-            return obj
-        serializer = self.serializer_class(obj, data=request.data, partial=True)
+        instance = self.model.objects.get(id=pk)
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return APIResponse.success(serializer.data)
-        return APIResponse.bad_request(serializer.errors)
+            return APIResponse.success(serializer)
+        return APIResponse.bad_request(serializer)
 
     def delete(self, request, pk):
-        obj = self.get_object(pk)
-        if isinstance(obj, Response):
-            return obj
-        obj.delete()
+        instance = self.model.objects.get(id=pk)
+        instance.delete()
         return APIResponse.deleted()
+
+    class Meta:
+        abstract = True
