@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lütfen Bekleyin...</title>
+</head>
+<body>
+<h1>Lütfen Bekleyin...</h1>
+<!-- Check Auth -->
+<script type="module" src="/js/CheckAuthenticate.js"></script>
+<script type="module">
+    import LocalStorage from "./js/lib/LocalStorage.js"
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const authUser =  LocalStorage.getItem('authUser')
+
+        if (authUser && authUser.is_superuser === true) {
+            window.location.href = '/admin/dashboard.html'
+        }else if (authUser && authUser.is_superuser === false) {
+            window.location.href = '/user/dashboard.html'
+        }
+    })
+</script>
+</body>
+</html>
