@@ -4,5 +4,6 @@ from leaves.models import Leave
 
 
 class LeaveSerializer(serializers.ModelSerializer):
-    model = Leave
-    fields = '__all__'
+    class Meta:
+        model = Leave
+        fields = "__all__"
